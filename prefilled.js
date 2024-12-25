@@ -1,4 +1,10 @@
-import { validState,validDescription,validCity,validPostalCode, validateAllFields} from "./validate.js";
+import {
+  validState,
+  validDescription,
+  validCity,
+  validPostalCode,
+  validateAllFields,
+} from "./validate.js";
 import showTableData from "./showTable.js";
 
 // Function for prefilled form data
@@ -7,7 +13,8 @@ function prefilledData(index) {
   const data = JSON.parse(tableData);
   const personData = data[index];
 
-  document.getElementById("formMode").value = "edit"; 
+  document.getElementById("formMode").value = "edit";
+
   document.getElementById("state").value = personData.state;
   document.getElementById("description").value = personData.description;
 
@@ -69,11 +76,14 @@ function prefilledData(index) {
   modal.show();
 
   const registrationForm = document.getElementById("registrationForm");
-  registrationForm.addEventListener("submit",function (event) {
+  registrationForm.addEventListener(
+    "submit",
+    function (event) {
       event.preventDefault();
       const formMode = document.getElementById("formMode").value;
 
       if (formMode === "edit") {
+        // adding cities and postal code data.
         const updatedCityPostalPairs = Array.from(
           document.querySelectorAll(".cities")
         ).map((cityField, index) => ({
@@ -113,6 +123,8 @@ function prefilledData(index) {
 
         // Close the modal
         modal.hide();
+
+        // reset the form
         registrationForm.reset();
         const elements = document.querySelectorAll(".cityGroup");
         let i = 0;
@@ -121,7 +133,7 @@ function prefilledData(index) {
             element.remove();
           } else {
             element.innerHTML = `<input
-        type="text"
+         type="text"
         class="form-control userInput cities"
         placeholder="Enter city"
       />
@@ -134,7 +146,7 @@ function prefilledData(index) {
       <div class="text-danger mb-2"></div>`;
             const newCityField = element.querySelector(".cities");
             const newPostalField = element.querySelector(".emails");
-            
+
             newCityField.addEventListener("blur", () => {
               console.log("City blur triggered!");
               validCity(newCityField);

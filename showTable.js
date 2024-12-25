@@ -1,42 +1,40 @@
 function showTableData(tableData) {
+  if (!tableData) return;
   const tableContent = document.getElementById("tableContent");
   tableContent.innerHTML = "";
 
-  if (tableData) {
-    tableData.forEach((item, index) => {
-      const row = document.createElement("tr");
+  tableData.forEach((item, index) => {
+    const row = document.createElement("tr");
 
-      const postalCodeDisplay = item.cityPostalPairs
-        ? item.cityPostalPairs
-            .slice(0, 2)
-            .map((cityObj) => `<div>${cityObj.postalCode}</div>`)
-            .join("")
-        : "N/A";
-      const cityDisplay = item.cityPostalPairs
-        ? item.cityPostalPairs
-            .slice(0, 2)
-            .map((cityObj) => `<div>${cityObj.city}</div>`)
-            .join("")
-        : "N/A";
+    const postalCodeDisplay = item.cityPostalPairs
+      ? item.cityPostalPairs
+          .slice(0, 2)
+          .map((cityObj) => `<div>${cityObj.postalCode}</div>`)
+          .join("")
+      : "N/A";
+    const cityDisplay = item.cityPostalPairs
+      ? item.cityPostalPairs
+          .slice(0, 2)
+          .map((cityObj) => `<div>${cityObj.city}</div>`)
+          .join("")
+      : "N/A";
 
-      row.innerHTML = `
+    row.innerHTML = `
         <td>${item.state}</td>
-        <td class="city-td" data-index="${index}">${cityDisplay}</td>
+        <td class="city-td text-decoration-underline" role="button" data-index="${index}">${cityDisplay}</td>
         <td>${postalCodeDisplay}</td>
         <td>
-          <i class="bi bi-pencil-fill edit" data-index="${index}"></i>
+          <i class="bi bi-pencil-fill edit text-decoration-underline" data-index="${index}"></i>
           <i class="bi bi-trash delete" data-index="${index}"></i>
         </td>`;
-      tableContent.appendChild(row);
-    });
-  }
+    tableContent.appendChild(row);
+  });
 
   const cityTds = document.querySelectorAll(".city-td");
   cityTds.forEach((cityTd) => {
-    cityTd.style.textDecoration = "underline";
     cityTd.addEventListener("click", () => {
       const index = cityTd.dataset.index;
-      const item = tableData[index]; 
+      const item = tableData[index];
       showCityDetailsModal(item.cityPostalPairs);
     });
   });
@@ -44,9 +42,8 @@ function showTableData(tableData) {
 
 function showCityDetailsModal(cityPostalPairs) {
   const modalContainer = document.getElementById("cityDetailsContainer");
-  modalContainer.innerHTML = ""; 
+  modalContainer.innerHTML = "";
 
- 
   const detailsTable = document.createElement("table");
   detailsTable.classList.add("table", "table-bordered", "text-center");
 
