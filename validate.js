@@ -76,10 +76,10 @@ function validCity(cityField) {
 
 // Validate postel code
 function validPostalCode(postalField) {
-  const errorPostalCode = postalField.nextElementSibling; 
+  const errorPostalCode = postalField.nextElementSibling;
   const postalCode = postalField.value.trim();
   const isValid = /^[1-9][0-9]{5}$/.test(postalCode);
-  
+
   const existingPostalCodes = Array.from(document.querySelectorAll(".emails"))
     .filter((field) => field !== postalField)
     .map((field) => field.value.trim());
@@ -125,4 +125,10 @@ function validateAllFields() {
   return isValid;
 }
 
-export {validState,validDescription,validCity,validPostalCode,validateAllFields};
+export {
+  validState,
+  validDescription,
+  validCity,
+  validPostalCode,
+  validateAllFields,
+};

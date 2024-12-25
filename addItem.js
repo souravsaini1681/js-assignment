@@ -2,15 +2,14 @@ import { validState, validDescription, validateAllFields } from "./validate.js";
 import showTableData from "./showTable.js";
 
 function addItem() {
-  const { description } = registrationForm.elements; 
-  const state = document.getElementById("state"); 
-  const cities = document.querySelectorAll(".cities"); 
-  const postalCodes = document.querySelectorAll(".emails"); 
-  
-  let id=0;
-  if (!validateAllFields() && !validState() && !validDescription()) {
+  const { description } = registrationForm.elements;
+  const state = document.getElementById("state");
+  const cities = document.querySelectorAll(".cities");
+  const postalCodes = document.querySelectorAll(".emails");
+
+  let id = 0;
+  if (!validateAllFields() || !validState() || !validDescription()) {
     return false;
- 
   }
   let storageData = localStorage.getItem("citiesData");
   if (!storageData || storageData === "[]") {
@@ -21,7 +20,7 @@ function addItem() {
     const totalEntries = storageData.length;
     id = storageData[totalEntries - 1].id + 1;
   }
- 
+
   const cityPostalPairs = Array.from(cities).map((cityField, index) => ({
     city: cityField.value.trim(),
     postalCode: postalCodes[index]?.value.trim(),
