@@ -37,23 +37,55 @@
         </thead>
         <tbody id="tableContent"></tbody>
       </table>
-              <!-- Search Section -->
-              <div class="my-4">
-                <h5>Find City</h5>
-                <div class="row">
-                    <div class="col-md-4">
-                        <select class="form-select" id="searchBy">
-                            <option value="city">City</option>
-                            <option value="postalcode">Postal Code</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" id="searchInput" placeholder="Search by City Name or Postal Code">
-                    </div>
-                </div>
-            </div>
+      <!-- Search Section -->
+      <div class="my-4">
+        <h5>Find City</h5>
+        <div class="row">
+          <div class="col-md-4">
+            <select class="form-select" id="searchBy">
+              <option value="city">City</option>
+              <option value="postalcode">Postal Code</option>
+            </select>
+          </div>
+          <div class="col-md-8">
+            <input
+              type="text"
+              class="form-control"
+              id="searchInput"
+              placeholder="Search by City Name or Postal Code"
+            />
+          </div>
+        </div>
+      </div>
     </div>
 
+    <!-- Modal to display city and postal code -->
+    <div
+      class="modal fade"
+      id="cityDetailsModal"
+      tabindex="-1"
+      aria-labelledby="cityDetailsModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cityDetailsModalLabel">City Details</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="cityDetailsContainer">
+              <!-- City and Postal Code will be populated here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- add items Modal -->
     <div
       class="modal fade"
@@ -68,67 +100,65 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">Add City</h1>
-              <button
-                type="button"
-                id="closeModal"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
+            <button
+              type="button"
+              id="closeModal"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <!-- form -->
             <form id="registrationForm" class="container">
               <div class="row">
                 <div class="col-6">
-                    <label for="state" class="form-label"
-                      ><b>State<sup class="text-danger">*</sup></b></label
-                    >
-                    <select
-                      id="state"
-                      class="form-select userInput"
-                      aria-label="Default select example"
-                    >
-                      <option value="" disabled selected>
-                        Select the State
-                      </option>
-                    </select>
-                    <div id="errorState" class="text-danger mb-2"></div>
+                  <label for="state" class="form-label"
+                    ><b>State<sup class="text-danger">*</sup></b></label
+                  >
+                  <select
+                    id="state"
+                    class="form-select userInput"
+                    aria-label="Default select example"
+                  >
+                    <option value="" disabled selected>Select the State</option>
+                  </select>
+                  <div id="errorState" class="text-danger mb-2"></div>
                 </div>
                 <div class="col-12">
-                    <div class="form-floating">
-                      <textarea
-                        class="form-control userInput"
-                        placeholder="Leave a comment here"
-                        id="description"
-                        style="height: 100px"
-                      ></textarea>
-                      <label for="description">description</label>
-                    </div>
-                    <div id="errorDescription" class="text-danger mb-2"></div>
+                  <div class="form-floating">
+                    <textarea
+                      class="form-control userInput"
+                      placeholder="Leave a comment here"
+                      id="description"
+                      style="height: 100px"
+                    ></textarea>
+                    <label for="description">description</label>
                   </div>
-                  <div class="col-8">
-                    <label for="citie" class="form-label"
-                      ><b>Cities<sup class="text-danger">*</sup></b>
-                      <i class="bi bi-plus" id="addCities"></i>
-                    </label>
-                    <div id="citiesContainer">
-                      <input
-                        type="text"
-                        class="form-control userInput cities"
-                        id="citie"
-                        placeholder="Enter city"
-                      />
-                      <div id="errorCities" class="text-danger mb-2"></div>
-                      <input
+                  <div id="errorDescription" class="text-danger mb-2"></div>
+                </div>
+                <div class="col-8">
+                  <label for="citie" class="form-label"
+                    ><b>Cities<sup class="text-danger">*</sup></b>
+                    <i class="bi bi-plus" id="addCities"></i>
+                  </label>
+                  <div id="citiesContainer">
+                    <input
+                      type="text"
+                      class="form-control userInput cities"
+                      id="city"
+                      placeholder="Enter city"
+                    />
+                    <div id="errorCities" class="text-danger mb-2"></div>
+                    <input
                       type="text"
                       class="form-control userInput emails"
                       id="postelCode"
                       placeholder="Enter postel code"
                     />
-                      <div id="errorPostelCode" class="text-danger mb-2"></div>
-                    </div>
+                    <div id="errorPostelCode" class="text-danger mb-2"></div>
                   </div>
+                </div>
                 <div class="modal-footer">
                   <button
                     id="saveFormChanges"
