@@ -6,10 +6,11 @@ function addItem() {
   const state = document.getElementById("state"); 
   const cities = document.querySelectorAll(".cities"); 
   const postalCodes = document.querySelectorAll(".emails"); 
-
   
+  let id=0;
   if (!validateAllFields() && !validState() && !validDescription()) {
     return false;
+ 
   }
   let storageData = localStorage.getItem("citiesData");
   if (!storageData || storageData === "[]") {
@@ -32,7 +33,6 @@ function addItem() {
     description: description.value,
     cityPostalPairs: cityPostalPairs,
   };
-
   storageData.push(data);
   localStorage.setItem("citiesData", JSON.stringify(storageData));
 

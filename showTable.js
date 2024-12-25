@@ -6,18 +6,8 @@ function showTableData(tableData) {
   tableData.forEach((item, index) => {
     const row = document.createElement("tr");
 
-    const postalCodeDisplay = item.cityPostalPairs
-      ? item.cityPostalPairs
-          .slice(0, 2)
-          .map((cityObj) => `<div>${cityObj.postalCode}</div>`)
-          .join("")
-      : "N/A";
-    const cityDisplay = item.cityPostalPairs
-      ? item.cityPostalPairs
-          .slice(0, 2)
-          .map((cityObj) => `<div>${cityObj.city}</div>`)
-          .join("")
-      : "N/A";
+    const postalCodeDisplay = item.cityPostalPairs ? item.cityPostalPairs.slice(0, 2).map((cityObj) => `<div>${cityObj.postalCode}</div>`).join(""): "N/A";
+    const cityDisplay = item.cityPostalPairs? item.cityPostalPairs.slice(0, 2).map((cityObj) => `<div>${cityObj.city}</div>`).join(""): "N/A";
 
     row.innerHTML = `
         <td>${item.state}</td>

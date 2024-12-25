@@ -1,10 +1,4 @@
-import {
-  validState,
-  validDescription,
-  validCity,
-  validPostalCode,
-  validateAllFields,
-} from "./validate.js";
+import {validState,validDescription,validCity,validPostalCode,validateAllFields} from "./validate.js";
 import showTableData from "./showTable.js";
 
 // Function for prefilled form data
@@ -148,11 +142,9 @@ function prefilledData(index) {
             const newPostalField = element.querySelector(".emails");
 
             newCityField.addEventListener("blur", () => {
-              console.log("City blur triggered!");
               validCity(newCityField);
             });
             newPostalField.addEventListener("blur", () => {
-              console.log("Postal Code blur triggered!");
               validPostalCode(newPostalField);
             });
           }
@@ -161,7 +153,7 @@ function prefilledData(index) {
 
         showTableData(data);
       } else {
-        console.log("Form is not in edit mode, changes not saved.");
+        console.log("Form not in edit mode");
       }
     },
     { once: true }

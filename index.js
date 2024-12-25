@@ -1,4 +1,4 @@
-
+// localStorage.clear()
 import {validState,validDescription,validCity,validPostalCode} from "./validate.js";
 import addItem from "./addItem.js";
 import showTableData from "./showTable.js";
@@ -30,7 +30,6 @@ document.getElementById("addCities").addEventListener("click", () => {
 
     const newGroup = document.createElement("div");
     newGroup.classList.add("cityGroup", "mt-3");
-
     newGroup.innerHTML = `
       <input
         type="text"
@@ -168,11 +167,9 @@ const initialCityField = document.getElementById("city");
 initialCityField.addEventListener("blur", () => validCity(initialCityField));
 
 
-
+//search table functionality
 document.getElementById("searchBy").addEventListener("change", function () {
-
   document.getElementById("searchInput").value = "";
-  
   const searchTable = document.getElementById("searchTable");
   if (searchTable) {
     searchTable.remove(); 
@@ -186,7 +183,6 @@ document.getElementById("searchInput").addEventListener("input", function () {
   const data = JSON.parse(tableData);
 
   if (searchTerm === "") {
-    
     const searchTable = document.getElementById("searchTable");
     if (searchTable) {
       searchTable.remove(); 
@@ -194,9 +190,7 @@ document.getElementById("searchInput").addEventListener("input", function () {
     return; 
   }
 
-
   const filteredData = data.filter((item) => {
-  
     const matchingCityPostalPairs = item.cityPostalPairs.filter((cityObj) => {
       if (searchBy === "city") {
         return cityObj.city.toLowerCase().includes(searchTerm); 
@@ -205,22 +199,15 @@ document.getElementById("searchInput").addEventListener("input", function () {
       }
       return false;
     });
-
-    
     return matchingCityPostalPairs.length > 0;
   });
-
-  
   showSearchTableData(filteredData, searchTerm);
 });
 
 
 function showSearchTableData(tableData, searchTerm) {
   let searchTable = document.getElementById("searchTable");
-
-  
   if (!searchTable) {
-   
     searchTable = document.createElement("table");
     searchTable.id = "searchTable"; 
     searchTable.classList.add("table", "table-striped", "mt-4"); 
@@ -235,8 +222,6 @@ function showSearchTableData(tableData, searchTerm) {
       </thead>
       <tbody id="searchTableContent"></tbody>
     `;
-
-    
     const searchContainer = document.querySelector(".my-4"); 
     searchContainer.appendChild(searchTable); 
   }
@@ -246,15 +231,9 @@ function showSearchTableData(tableData, searchTerm) {
 
   if (tableData && tableData.length > 0) {
     tableData.forEach((item) => {
-    
       item.cityPostalPairs.forEach((cityObj) => {
-        
-        if (
-          cityObj.city.toLowerCase().includes(searchTerm) ||
-          cityObj.postalCode.includes(searchTerm)
-        ) {
+        if (cityObj.city.toLowerCase().includes(searchTerm) ||cityObj.postalCode.includes(searchTerm)) {
           const row = document.createElement("tr");
-
           row.innerHTML = `
             <td>${item.state}</td>
             <td>${item.description}</td>
