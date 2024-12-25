@@ -37,7 +37,6 @@ function validDescription() {
 }
 
 // Validate a single city field
-// Validate a single city field
 function validCity(cityField) {
   const errorCities = cityField.nextElementSibling; // Error element immediately after the field
   const cityName = cityField.value.trim();
