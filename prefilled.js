@@ -1,37 +1,22 @@
-import {
-  validState,
-  validDescription,
-  validCity,
-  validPostalCode,
-  validateAllFields,
-} from "./validate.js";
+import { validState,validDescription,validCity,validPostalCode, validateAllFields} from "./validate.js";
 import showTableData from "./showTable.js";
 
 // Function for prefilled form data
 function prefilledData(index) {
-  console.log("prefilled");
-
   const tableData = localStorage.getItem("citiesData");
   const data = JSON.parse(tableData);
   const personData = data[index];
 
-  // Set the form mode to "edit" when editing an existing entry
-  document.getElementById("formMode").value = "edit"; // Set mode to "edit"
-
-  // Prefill static fields
+  document.getElementById("formMode").value = "edit"; 
   document.getElementById("state").value = personData.state;
   document.getElementById("description").value = personData.description;
 
-  // Clear existing city and postal code fields
   const citiesContainer = document.getElementById("citiesContainer");
   citiesContainer.innerHTML = "";
 
-  // Prefill dynamically added cities and postal codes
   personData.cityPostalPairs.forEach((pair, index) => {
-    // Only allow the "X" button for groups that are not the first one
     if (validateAllFields()) {
       const citiesContainer = document.getElementById("citiesContainer");
-
       const newGroup = document.createElement("div");
       newGroup.classList.add("cityGroup", "mt-3");
 
@@ -51,8 +36,6 @@ function prefilledData(index) {
       />
       <div class="text-danger mb-2"></div>
     `;
-
-      // Only add the "X" button if it's not the first item
       if (index !== 0) {
         newGroup.innerHTML += `
         <button type="button" class="btn btn-danger removeBtn" style="margin-top: 5px;">X</button>
@@ -61,22 +44,17 @@ function prefilledData(index) {
 
       citiesContainer.appendChild(newGroup);
 
-      // Get the newly created city and postal code input fields
       const newCityField = newGroup.querySelector(".cities");
       const newPostalField = newGroup.querySelector(".emails");
       const removeBtn = newGroup.querySelector(".removeBtn");
 
-      // Attach blur event listeners for city and postal code validation
       newCityField.addEventListener("blur", () => {
-        console.log("City blur triggered!");
         validCity(newCityField);
       });
       newPostalField.addEventListener("blur", () => {
-        console.log("Postal Code blur triggered!");
         validPostalCode(newPostalField);
       });
 
-      // Add event listener to remove the group when the "X" button is clicked, but only if it exists
       if (removeBtn) {
         removeBtn.addEventListener("click", () => {
           newGroup.remove();
@@ -90,19 +68,12 @@ function prefilledData(index) {
   const modal = new bootstrap.Modal(modalElement);
   modal.show();
 
-  // Handle saving the form changes
   const registrationForm = document.getElementById("registrationForm");
-  registrationForm.addEventListener(
-    "submit",
-    function (event) {
+  registrationForm.addEventListener("submit",function (event) {
       event.preventDefault();
       const formMode = document.getElementById("formMode").value;
 
-      // Only allow saving if the form is in "edit" mode
       if (formMode === "edit") {
-        console.log("This is running in edit mode");
-
-        // Collect updated data
         const updatedCityPostalPairs = Array.from(
           document.querySelectorAll(".cities")
         ).map((cityField, index) => ({
@@ -117,11 +88,9 @@ function prefilledData(index) {
           cityPostalPairs: updatedCityPostalPairs,
         };
 
-        // Validate static fields
         if (!validState() || !validDescription()) {
           return;
         }
-
         // Validate dynamic fields
         let areCitiesValid = true;
         let arePostalCodesValid = true;
@@ -165,7 +134,7 @@ function prefilledData(index) {
       <div class="text-danger mb-2"></div>`;
             const newCityField = element.querySelector(".cities");
             const newPostalField = element.querySelector(".emails");
-            // Attach blur event listeners for city and postal code validation
+            
             newCityField.addEventListener("blur", () => {
               console.log("City blur triggered!");
               validCity(newCityField);

@@ -36,16 +36,13 @@ function validDescription() {
   return true;
 }
 
-// Validate a single city field
+// Validate city
 function validCity(cityField) {
-  const errorCities = cityField.nextElementSibling; // Error element immediately after the field
+  const errorCities = cityField.nextElementSibling;
   const cityName = cityField.value.trim();
   const cityLength = cityName.length;
 
-  // Retrieve the selected state
   const state = document.getElementById("state").value.trim();
-
-  // Retrieve all cities entered so far
   const citiesInState = Array.from(document.querySelectorAll(".cities"))
     .filter(
       (field) =>
@@ -77,13 +74,12 @@ function validCity(cityField) {
   }
 }
 
-// Validate a single postal code field
+// Validate postel code
 function validPostalCode(postalField) {
-  const errorPostalCode = postalField.nextElementSibling; // Error element immediately after the field
+  const errorPostalCode = postalField.nextElementSibling; 
   const postalCode = postalField.value.trim();
   const isValid = /^[1-9][0-9]{5}$/.test(postalCode);
-
-  // Retrieve all postal codes
+  
   const existingPostalCodes = Array.from(document.querySelectorAll(".emails"))
     .filter((field) => field !== postalField)
     .map((field) => field.value.trim());
@@ -112,7 +108,6 @@ function validPostalCode(postalField) {
   }
 }
 
-// Validate all current city and postal code fields
 function validateAllFields() {
   let isValid = true;
 
@@ -130,10 +125,4 @@ function validateAllFields() {
   return isValid;
 }
 
-export {
-  validState,
-  validDescription,
-  validCity,
-  validPostalCode,
-  validateAllFields,
-};
+export {validState,validDescription,validCity,validPostalCode,validateAllFields};

@@ -31,13 +31,12 @@ function showTableData(tableData) {
     });
   }
 
-  // Add click event listener to city td elements to trigger modal
   const cityTds = document.querySelectorAll(".city-td");
   cityTds.forEach((cityTd) => {
     cityTd.style.textDecoration = "underline";
     cityTd.addEventListener("click", () => {
       const index = cityTd.dataset.index;
-      const item = tableData[index]; // Get the corresponding item
+      const item = tableData[index]; 
       showCityDetailsModal(item.cityPostalPairs);
     });
   });
@@ -45,9 +44,9 @@ function showTableData(tableData) {
 
 function showCityDetailsModal(cityPostalPairs) {
   const modalContainer = document.getElementById("cityDetailsContainer");
-  modalContainer.innerHTML = ""; // Clear previous content
+  modalContainer.innerHTML = ""; 
 
-  // Create a table for city details
+ 
   const detailsTable = document.createElement("table");
   detailsTable.classList.add("table", "table-bordered", "text-center");
 
@@ -78,8 +77,6 @@ function showCityDetailsModal(cityPostalPairs) {
   }
 
   detailsTable.appendChild(tableBody);
-
-  // Append the table to the modal container
   modalContainer.appendChild(detailsTable);
 
   // Show the modal
