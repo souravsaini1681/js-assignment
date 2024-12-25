@@ -1,10 +1,4 @@
-import {
-  validState,
-  validDescription,
-  validateAllFields,
-  validCity,
-  validPostalCode,
-} from "./validate.js";
+import { validState, validDescription, validateAllFields } from "./validate.js";
 import showTableData from "./showTable.js";
 
 function addItem() {
@@ -12,9 +6,7 @@ function addItem() {
   const state = document.getElementById("state"); // Access state field
   const cities = document.querySelectorAll(".cities"); // Get all city fields
   const postalCodes = document.querySelectorAll(".emails"); // Get all postal code fields
-
   let id = 0;
-
   // Validate state and description
   if (!validateAllFields() && !validState() && !validDescription()) {
     console.log("this ran");

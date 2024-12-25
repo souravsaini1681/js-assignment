@@ -34,6 +34,7 @@ function showTableData(tableData) {
   // Add click event listener to city td elements to trigger modal
   const cityTds = document.querySelectorAll(".city-td");
   cityTds.forEach((cityTd) => {
+    cityTd.style.textDecoration = "underline";
     cityTd.addEventListener("click", () => {
       const index = cityTd.dataset.index;
       const item = tableData[index]; // Get the corresponding item

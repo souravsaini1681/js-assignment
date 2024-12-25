@@ -9,9 +9,14 @@ import showTableData from "./showTable.js";
 
 // Function for prefilled form data
 function prefilledData(index) {
+  console.log("prefilled");
+
   const tableData = localStorage.getItem("citiesData");
   const data = JSON.parse(tableData);
   const personData = data[index];
+
+  // Set the form mode to "edit" when editing an existing entry
+  document.getElementById("formMode").value = "edit"; // Set mode to "edit"
 
   // Prefill static fields
   document.getElementById("state").value = personData.state;
@@ -86,52 +91,96 @@ function prefilledData(index) {
   modal.show();
 
   // Handle saving the form changes
-  const saveFormChanges = document.getElementById("saveFormChanges");
-  saveFormChanges.onclick = function (event) {
+  const registrationForm = document.getElementById("registrationForm");
+  registrationForm.addEventListener("submit", function (event) {
     event.preventDefault();
+    const formMode = document.getElementById("formMode").value;
 
-    // Collect updated data
-    const updatedCityPostalPairs = Array.from(
-      document.querySelectorAll(".cities")
-    ).map((cityField, index) => ({
-      city: cityField.value.trim(),
-      postalCode: document.querySelectorAll(".emails")[index]?.value.trim(),
-    }));
+    // Only allow saving if the form is in "edit" mode
+    if (formMode === "edit") {
+      console.log("This is running in edit mode");
 
-    const updatedData = {
-      id: personData.id,
-      state: document.getElementById("state").value,
-      description: document.getElementById("description").value.trim(),
-      cityPostalPairs: updatedCityPostalPairs,
-    };
+      // Collect updated data
+      const updatedCityPostalPairs = Array.from(
+        document.querySelectorAll(".cities")
+      ).map((cityField, index) => ({
+        city: cityField.value.trim(),
+        postalCode: document.querySelectorAll(".emails")[index]?.value.trim(),
+      }));
 
-    // Validate static fields
-    if (!validState() || !validDescription()) {
-      return;
+      const updatedData = {
+        id: personData.id,
+        state: document.getElementById("state").value,
+        description: document.getElementById("description").value.trim(),
+        cityPostalPairs: updatedCityPostalPairs,
+      };
+
+      // Validate static fields
+      if (!validState() || !validDescription()) {
+        return;
+      }
+
+      // Validate dynamic fields
+      let areCitiesValid = true;
+      let arePostalCodesValid = true;
+
+      document.querySelectorAll(".cities").forEach((cityField) => {
+        if (!validCity(cityField)) areCitiesValid = false;
+      });
+
+      document.querySelectorAll(".emails").forEach((postalField) => {
+        if (!validPostalCode(postalField)) arePostalCodesValid = false;
+      });
+
+      if (!areCitiesValid || !arePostalCodesValid) {
+        return;
+      }
+
+      // Update the localStorage
+      data[index] = updatedData;
+      localStorage.setItem("citiesData", JSON.stringify(data));
+
+      // Close the modal
+      modal.hide();
+      registrationForm.reset();
+      const elements = document.querySelectorAll(".cityGroup");
+      let i = 0;
+      elements.forEach((element) => {
+        if (i) {
+          element.remove();
+        } else {
+          element.innerHTML = `<input
+        type="text"
+        class="form-control userInput cities"
+        placeholder="Enter city"
+      />
+      <div class="text-danger mb-2"></div>
+      <input
+        type="text"
+        class="form-control userInput emails"
+        placeholder="Enter postal code"
+      />
+      <div class="text-danger mb-2"></div>`;
+          const newCityField = element.querySelector(".cities");
+          const newPostalField = element.querySelector(".emails");
+          // Attach blur event listeners for city and postal code validation
+          newCityField.addEventListener("blur", () => {
+            console.log("City blur triggered!");
+            validCity(newCityField);
+          });
+          newPostalField.addEventListener("blur", () => {
+            console.log("Postal Code blur triggered!");
+            validPostalCode(newPostalField);
+          });
+        }
+        i++;
+      });
+
+      showTableData(data);
+    } else {
+      console.log("Form is not in edit mode, changes not saved.");
     }
-
-    // Validate dynamic fields
-    let areCitiesValid = true;
-    let arePostalCodesValid = true;
-
-    document.querySelectorAll(".cities").forEach((cityField) => {
-      if (!validCity(cityField)) areCitiesValid = false;
-    });
-
-    document.querySelectorAll(".emails").forEach((postalField) => {
-      if (!validPostalCode(postalField)) arePostalCodesValid = false;
-    });
-
-    if (!areCitiesValid || !arePostalCodesValid) {
-      return; // Stop execution if validation fails
-    }
-
-    // Update the localStorage
-    data[index] = updatedData;
-    localStorage.setItem("citiesData", JSON.stringify(data));
-    modal.hide();
-    showTableData(data);
-  };
+  });
 }
 
 export default prefilledData;
