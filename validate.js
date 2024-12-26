@@ -36,14 +36,12 @@ function validDescription() {
   return true;
 }
 
-// Validate city
 function validCity(cityField) {
   const errorCities = cityField.nextElementSibling;
   const cityName = cityField.value.trim();
   const cityLength = cityName.length;
 
-  const state = document.getElementById("state").value.trim();
-  const citiesInState = Array.from(document.querySelectorAll(".cities"))
+  const citiesInForm = Array.from(document.querySelectorAll(".cities"))
     .filter(
       (field) =>
         field !== cityField &&
@@ -51,6 +49,12 @@ function validCity(cityField) {
     )
     .map((field) => field.value.trim().toLowerCase());
 
+  const savedData = JSON.parse(localStorage.getItem("citiesData")) || [];
+  const allSavedCities = savedData.flatMap((entry) =>
+    entry.cityPostalPairs.map((pair) => pair.city.trim().toLowerCase())
+  );
+
+  // Validation checks
   if (!cityName) {
     errorCities.innerHTML = "City name is required.";
     cityField.classList.add("is-invalid");
@@ -61,8 +65,12 @@ function validCity(cityField) {
     cityField.classList.add("is-invalid");
     cityField.classList.remove("is-valid");
     return false;
-  } else if (citiesInState.includes(cityName.toLowerCase())) {
-    errorCities.innerHTML = "City name must be unique within the state.";
+  } else if (
+    citiesInForm.includes(cityName.toLowerCase()) ||
+    (allSavedCities.includes(cityName.toLowerCase()) &&
+      !allSavedCities.includes(cityField.dataset.initialValue || ""))
+  ) {
+    errorCities.innerHTML = "City name must be unique globally.";
     cityField.classList.add("is-invalid");
     cityField.classList.remove("is-valid");
     return false;
@@ -80,18 +88,15 @@ function validPostalCode(postalField) {
   const postalCode = postalField.value.trim();
   const isValid = /^[1-9][0-9]{5}$/.test(postalCode);
 
-  // Get all postal codes in the form except the current field
   const existingPostalCodes = Array.from(document.querySelectorAll(".emails"))
-    .filter((field) => field !== postalField) // Exclude the current field
+    .filter((field) => field !== postalField)
     .map((field) => field.value.trim());
 
-  // Get all saved postal codes from localStorage
   const savedData = JSON.parse(localStorage.getItem("citiesData")) || [];
   const allSavedPostalCodes = savedData.flatMap((entry) =>
     entry.cityPostalPairs.map((pair) => pair.postalCode.trim())
   );
 
-  // Check if the postal code is unique
   if (!postalCode) {
     errorPostalCode.innerHTML = "Postal code is required.";
     postalField.classList.add("is-invalid");

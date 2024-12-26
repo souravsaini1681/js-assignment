@@ -1,11 +1,27 @@
 // localStorage.clear()
-import {validState,validDescription,validCity,validPostalCode} from "./validate.js";
+import {
+  validState,
+  validDescription,
+  validCity,
+  validPostalCode,
+} from "./validate.js";
 import addItem from "./addItem.js";
 import showTableData from "./showTable.js";
 import prefilledData from "./prefilled.js";
 import deleteItem from "./deleteItem.js";
 
-const states = [ "Punjab","Haryana","Himachal","Maharashtra","Kerala","Uttar Pradesh","Gujarat","Rajasthan","Bihar", "West Bengal",];
+const states = [
+  "Punjab",
+  "Haryana",
+  "Himachal",
+  "Maharashtra",
+  "Kerala",
+  "Uttar Pradesh",
+  "Gujarat",
+  "Rajasthan",
+  "Bihar",
+  "West Bengal",
+];
 
 // show state
 const stateDropdown = document.getElementById("state");
@@ -16,7 +32,7 @@ states.forEach((state) => {
   stateDropdown.appendChild(option);
 });
 
-// Blur events 
+// Blur events
 const state = document.getElementById("state");
 state.addEventListener("blur", validState);
 
@@ -65,14 +81,13 @@ document.getElementById("addCities").addEventListener("click", () => {
   }
 });
 
-
 const modalElement = document.getElementById("addItemModal");
 const modal = new bootstrap.Modal(modalElement);
 
 // Add modal open and form submission
 const budgetModal = document.getElementById("addModal");
 budgetModal.addEventListener("click", function () {
-  document.getElementById("formMode").value = "add"; 
+  document.getElementById("formMode").value = "add";
   modal.show();
 });
 
@@ -90,8 +105,10 @@ registrationForm.addEventListener("submit", function (event) {
 document.getElementById("closeModal").addEventListener("click", () => {
   modal.hide();
   registrationForm.reset();
+
   const elements = document.querySelectorAll(".cityGroup");
   let i = 0;
+
   elements.forEach((element) => {
     if (i) {
       element.remove();
@@ -108,9 +125,11 @@ document.getElementById("closeModal").addEventListener("click", () => {
         placeholder="Enter postal code"
       />
       <div class="text-danger mb-2"></div>`;
+
       const newCityField = element.querySelector(".cities");
       const newPostalField = element.querySelector(".emails");
-      
+
+      // Add event listeners for validation
       newCityField.addEventListener("blur", () => {
         validCity(newCityField);
       });
@@ -120,15 +139,29 @@ document.getElementById("closeModal").addEventListener("click", () => {
     }
     i++;
   });
+
+  // Clear validation errors and classes
+  const state = document.getElementById("state");
+  state.classList.remove("is-valid", "is-invalid");
+
+  document.querySelectorAll(".form-control").forEach((input) => {
+    input.classList.remove("is-valid", "is-invalid");
+  });
+
+  document.querySelectorAll(".text-danger").forEach((errorElement) => {
+    errorElement.innerHTML = "";
+  });
 });
 
-// Show table data 
+// Show table data
 let storageData = localStorage.getItem("citiesData");
 storageData = JSON.parse(storageData);
 showTableData(storageData);
 
 // Edit and delete functionality
-document.getElementById("tableContent").addEventListener("click", function (event) {
+document
+  .getElementById("tableContent")
+  .addEventListener("click", function (event) {
     if (event.target.closest(".edit")) {
       const index = event.target.closest(".edit").getAttribute("data-index");
       prefilledData(index);
@@ -166,36 +199,35 @@ initialPostalCodeField.addEventListener("blur", () =>
 const initialCityField = document.getElementById("city");
 initialCityField.addEventListener("blur", () => validCity(initialCityField));
 
-
 //search table functionality
 document.getElementById("searchBy").addEventListener("change", function () {
   document.getElementById("searchInput").value = "";
   const searchTable = document.getElementById("searchTable");
   if (searchTable) {
-    searchTable.remove(); 
+    searchTable.remove();
   }
 });
 
 document.getElementById("searchInput").addEventListener("input", function () {
-  const searchBy = document.getElementById("searchBy").value; 
-  const searchTerm = this.value.toLowerCase(); 
+  const searchBy = document.getElementById("searchBy").value;
+  const searchTerm = this.value.toLowerCase();
   const tableData = localStorage.getItem("citiesData");
   const data = JSON.parse(tableData);
 
   if (searchTerm === "") {
     const searchTable = document.getElementById("searchTable");
     if (searchTable) {
-      searchTable.remove(); 
+      searchTable.remove();
     }
-    return; 
+    return;
   }
 
   const filteredData = data.filter((item) => {
     const matchingCityPostalPairs = item.cityPostalPairs.filter((cityObj) => {
       if (searchBy === "city") {
-        return cityObj.city.toLowerCase().includes(searchTerm); 
+        return cityObj.city.toLowerCase().includes(searchTerm);
       } else if (searchBy === "postalcode") {
-        return cityObj.postalCode.includes(searchTerm); 
+        return cityObj.postalCode.includes(searchTerm);
       }
       return false;
     });
@@ -204,13 +236,12 @@ document.getElementById("searchInput").addEventListener("input", function () {
   showSearchTableData(filteredData, searchTerm);
 });
 
-
 function showSearchTableData(tableData, searchTerm) {
   let searchTable = document.getElementById("searchTable");
   if (!searchTable) {
     searchTable = document.createElement("table");
-    searchTable.id = "searchTable"; 
-    searchTable.classList.add("table", "table-striped", "mt-4"); 
+    searchTable.id = "searchTable";
+    searchTable.classList.add("table", "table-striped", "mt-4");
     searchTable.innerHTML = `
       <thead>
         <tr>
@@ -222,17 +253,20 @@ function showSearchTableData(tableData, searchTerm) {
       </thead>
       <tbody id="searchTableContent"></tbody>
     `;
-    const searchContainer = document.querySelector(".my-4"); 
-    searchContainer.appendChild(searchTable); 
+    const searchContainer = document.querySelector(".my-4");
+    searchContainer.appendChild(searchTable);
   }
 
   const searchTableContent = document.getElementById("searchTableContent");
-  searchTableContent.innerHTML = ""; 
+  searchTableContent.innerHTML = "";
 
   if (tableData && tableData.length > 0) {
     tableData.forEach((item) => {
       item.cityPostalPairs.forEach((cityObj) => {
-        if (cityObj.city.toLowerCase().includes(searchTerm) ||cityObj.postalCode.includes(searchTerm)) {
+        if (
+          cityObj.city.toLowerCase().includes(searchTerm) ||
+          cityObj.postalCode.includes(searchTerm)
+        ) {
           const row = document.createElement("tr");
           row.innerHTML = `
             <td>${item.state}</td>

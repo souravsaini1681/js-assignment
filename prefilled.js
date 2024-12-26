@@ -22,12 +22,11 @@ function prefilledData(index) {
   citiesContainer.innerHTML = "";
 
   personData.cityPostalPairs.forEach((pair, index) => {
-    if (validateAllFields()) {
-      const citiesContainer = document.getElementById("citiesContainer");
-      const newGroup = document.createElement("div");
-      newGroup.classList.add("cityGroup", "mt-3");
+    const citiesContainer = document.getElementById("citiesContainer");
+    const newGroup = document.createElement("div");
+    newGroup.classList.add("cityGroup", "mt-3");
 
-      newGroup.innerHTML = `
+    newGroup.innerHTML = `
       <input
         type="text"
         class="form-control userInput cities"
@@ -43,32 +42,32 @@ function prefilledData(index) {
       />
       <div class="text-danger mb-2"></div>
     `;
-      if (index !== 0) {
-        newGroup.innerHTML += `
+    if (index !== 0) {
+      newGroup.innerHTML += `
         <button type="button" class="btn btn-danger removeBtn" style="margin-top: 5px;">X</button>
       `;
-      }
+    }
 
-      citiesContainer.appendChild(newGroup);
+    citiesContainer.appendChild(newGroup);
 
-      const newCityField = newGroup.querySelector(".cities");
-      const newPostalField = newGroup.querySelector(".emails");
-      newPostalField.setAttribute("data-initial-value", pair.postalCode.trim());
+    const newCityField = newGroup.querySelector(".cities");
+    const newPostalField = newGroup.querySelector(".emails");
+    newPostalField.setAttribute("data-initial-value", pair.postalCode.trim());
+    newCityField.setAttribute("data-initial-value", pair.city.trim());
 
-      const removeBtn = newGroup.querySelector(".removeBtn");
+    const removeBtn = newGroup.querySelector(".removeBtn");
 
-      newCityField.addEventListener("blur", () => {
-        validCity(newCityField);
+    newCityField.addEventListener("blur", () => {
+      validCity(newCityField);
+    });
+    newPostalField.addEventListener("blur", () => {
+      validPostalCode(newPostalField);
+    });
+
+    if (removeBtn) {
+      removeBtn.addEventListener("click", () => {
+        newGroup.remove();
       });
-      newPostalField.addEventListener("blur", () => {
-        validPostalCode(newPostalField);
-      });
-
-      if (removeBtn) {
-        removeBtn.addEventListener("click", () => {
-          newGroup.remove();
-        });
-      }
     }
   });
 
@@ -157,6 +156,17 @@ function prefilledData(index) {
             });
           }
           i++;
+        });
+        // Clear validation errors and classes
+        const state = document.getElementById("state");
+        state.classList.remove("is-valid", "is-invalid");
+
+        document.querySelectorAll(".form-control").forEach((input) => {
+          input.classList.remove("is-valid", "is-invalid");
+        });
+
+        document.querySelectorAll(".text-danger").forEach((errorElement) => {
+          errorElement.innerHTML = "";
         });
 
         showTableData(data);
