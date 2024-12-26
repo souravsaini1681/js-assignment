@@ -45,21 +45,28 @@ document.getElementById("addCities").addEventListener("click", () => {
     const citiesContainer = document.getElementById("citiesContainer");
 
     const newGroup = document.createElement("div");
-    newGroup.classList.add("cityGroup", "mt-3");
+    newGroup.classList.add("cityGroup", "mt-3", "row", "gx-3"); // Adding row and gap utilities
+
     newGroup.innerHTML = `
-      <input
-        type="text"
-        class="form-control userInput cities"
-        placeholder="Enter city"
-      />
-      <div class="text-danger mb-2"></div>
-      <input
-        type="text"
-        class="form-control userInput emails"
-        placeholder="Enter postal code"
-      />
-      <div class="text-danger mb-2"></div>
-      <button type="button" class="btn btn-danger removeBtn" style="margin-top: 5px;">X</button>
+      <div class="col-md-5 col-sm-12">
+        <input
+          type="text"
+          class="form-control userInput cities"
+          placeholder="Enter city"
+        />
+        <div class="text-danger mb-2"></div>
+      </div>
+      <div class="col-md-5 col-sm-12">
+        <input
+          type="text"
+          class="form-control userInput emails"
+          placeholder="Enter postal code"
+        />
+        <div class="text-danger mb-2"></div>
+      </div>
+      <div class="col-md-2 col-sm-12 text-end">
+        <button type="button" class="btn btn-danger removeBtn w-100" style="margin-top: 5px;">X</button>
+      </div>
     `;
 
     citiesContainer.appendChild(newGroup);
@@ -218,6 +225,7 @@ document.getElementById("searchInput").addEventListener("input", function () {
 
   if (searchTerm === "") {
     searchResultsContainer.innerHTML = "";
+    searchTable.remove();
     return;
   }
 

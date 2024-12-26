@@ -24,9 +24,10 @@ function prefilledData(index) {
   personData.cityPostalPairs.forEach((pair, index) => {
     const citiesContainer = document.getElementById("citiesContainer");
     const newGroup = document.createElement("div");
-    newGroup.classList.add("cityGroup", "mt-3");
+    newGroup.classList.add("cityGroup", "mt-3", "row", "gx-3"); // Adding row and gap utilities
 
     newGroup.innerHTML = `
+    <div class="col-md-5 col-sm-12">
       <input
         type="text"
         class="form-control userInput cities"
@@ -34,6 +35,8 @@ function prefilledData(index) {
         value="${pair.city}"
       />
       <div class="text-danger mb-2"></div>
+    </div>
+    <div class="col-md-5 col-sm-12">
       <input
         type="text"
         class="form-control userInput emails"
@@ -41,12 +44,15 @@ function prefilledData(index) {
         value="${pair.postalCode}"
       />
       <div class="text-danger mb-2"></div>
-    `;
-    if (index !== 0) {
-      newGroup.innerHTML += `
-        <button type="button" class="btn btn-danger removeBtn" style="margin-top: 5px;">X</button>
-      `;
-    }
+    </div>
+    <div class="col-md-2 col-sm-12 text-end">
+      ${
+        index !== 0
+          ? `<button type="button" class="btn btn-danger removeBtn w-100" style="margin-top: 5px;">X</button>`
+          : ""
+      }
+    </div>
+  `;
 
     citiesContainer.appendChild(newGroup);
 
