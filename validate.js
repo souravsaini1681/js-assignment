@@ -80,10 +80,18 @@ function validPostalCode(postalField) {
   const postalCode = postalField.value.trim();
   const isValid = /^[1-9][0-9]{5}$/.test(postalCode);
 
+  // Get all postal codes in the form except the current field
   const existingPostalCodes = Array.from(document.querySelectorAll(".emails"))
-    .filter((field) => field !== postalField)
+    .filter((field) => field !== postalField) // Exclude the current field
     .map((field) => field.value.trim());
 
+  // Get all saved postal codes from localStorage
+  const savedData = JSON.parse(localStorage.getItem("citiesData")) || [];
+  const allSavedPostalCodes = savedData.flatMap((entry) =>
+    entry.cityPostalPairs.map((pair) => pair.postalCode.trim())
+  );
+
+  // Check if the postal code is unique
   if (!postalCode) {
     errorPostalCode.innerHTML = "Postal code is required.";
     postalField.classList.add("is-invalid");
@@ -95,8 +103,12 @@ function validPostalCode(postalField) {
     postalField.classList.add("is-invalid");
     postalField.classList.remove("is-valid");
     return false;
-  } else if (existingPostalCodes.includes(postalCode)) {
-    errorPostalCode.innerHTML = "Postal code must be unique across all cities.";
+  } else if (
+    existingPostalCodes.includes(postalCode) ||
+    (allSavedPostalCodes.includes(postalCode) &&
+      !allSavedPostalCodes.includes(postalField.dataset.initialValue || ""))
+  ) {
+    errorPostalCode.innerHTML = "Postal code must be unique across all states.";
     postalField.classList.add("is-invalid");
     postalField.classList.remove("is-valid");
     return false;

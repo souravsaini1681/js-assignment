@@ -1,4 +1,10 @@
-import {validState,validDescription,validCity,validPostalCode,validateAllFields} from "./validate.js";
+import {
+  validState,
+  validDescription,
+  validCity,
+  validPostalCode,
+  validateAllFields,
+} from "./validate.js";
 import showTableData from "./showTable.js";
 
 // Function for prefilled form data
@@ -47,6 +53,8 @@ function prefilledData(index) {
 
       const newCityField = newGroup.querySelector(".cities");
       const newPostalField = newGroup.querySelector(".emails");
+      newPostalField.setAttribute("data-initial-value", pair.postalCode.trim());
+
       const removeBtn = newGroup.querySelector(".removeBtn");
 
       newCityField.addEventListener("blur", () => {
