@@ -233,46 +233,51 @@ document.getElementById("searchInput").addEventListener("input", function () {
     return matchingCityPostalPairs.length > 0;
   });
 
-  showSearchDataUI(filteredData, searchTerm);
+  showSearchTableData(filteredData, searchTerm);
 });
+function showSearchTableData(tableData, searchTerm) {
+  let searchTable = document.getElementById("searchTable");
+  if (!searchTable) {
+    searchTable = document.createElement("table");
+    searchTable.id = "searchTable";
+    searchTable.classList.add("table", "table-striped", "mt-4");
+    searchTable.innerHTML = `
+      <thead>
+        <tr>
+          <th>State</th>
+          <th>Description</th>
+          <th>City</th>
+          <th>Postal Code</th>
+        </tr>
+      </thead>
+      <tbody id="searchTableContent"></tbody>
+    `;
+    const searchContainer = document.querySelector(".my-4");
+    searchContainer.appendChild(searchTable);
+  }
 
-function showSearchDataUI(data, searchTerm) {
-  const searchResultsContainer = document.getElementById("searchResults");
-  searchResultsContainer.innerHTML = "";
+  const searchTableContent = document.getElementById("searchTableContent");
+  searchTableContent.innerHTML = "";
 
-  if (data && data.length > 0) {
-    let resultsFound = false;
-
-    data.forEach((item) => {
+  if (tableData && tableData.length > 0) {
+    tableData.forEach((item) => {
       item.cityPostalPairs.forEach((cityObj) => {
         if (
-          cityObj.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          cityObj.city.toLowerCase().includes(searchTerm) ||
           cityObj.postalCode.includes(searchTerm)
         ) {
-          resultsFound = true;
-
-          const card = document.createElement("div");
-          card.classList.add("card", "mb-3");
-          card.style.border = "1px solid #ddd";
-
-          card.innerHTML = `
-            <div class="card-body">
-              <p><strong>State</strong>: ${item.state}</p>
-              <p><strong>City</strong>: ${cityObj.city}</p>
-              <p><strong>Postal code</strong>: ${cityObj.postalCode}</p>
-            </div>
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${item.state}</td>
+            <td>${item.description}</td>
+            <td>${cityObj.city}</td>
+            <td>${cityObj.postalCode}</td>
           `;
-
-          searchResultsContainer.appendChild(card);
+          searchTableContent.appendChild(row);
         }
       });
     });
-
-    // Show no results message if no matches found
-    if (!resultsFound) {
-      searchResultsContainer.innerHTML = `<div class="alert alert-warning" role="alert">No results found.</div>`;
-    }
   } else {
-    searchResultsContainer.innerHTML = `<div class="alert alert-warning" role="alert">No results found.</div>`;
+    searchTableContent.innerHTML = `<tr><td colspan="4">No results found</td></tr>`;
   }
 }

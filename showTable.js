@@ -6,16 +6,26 @@ function showTableData(tableData) {
   tableData.forEach((item, index) => {
     const row = document.createElement("tr");
 
-    const postalCodeDisplay = item.cityPostalPairs ? item.cityPostalPairs.slice(0, 2).map((cityObj) => `<div>${cityObj.postalCode}</div>`).join(""): "N/A";
-    const cityDisplay = item.cityPostalPairs? item.cityPostalPairs.slice(0, 2).map((cityObj) => `<div>${cityObj.city}</div>`).join(""): "N/A";
+    const postalCodeDisplay = item.cityPostalPairs
+      ? item.cityPostalPairs
+          .slice(0, 2)
+          .map((cityObj) => `<div>${cityObj.postalCode}</div>`)
+          .join("")
+      : "N/A";
+    const cityDisplay = item.cityPostalPairs
+      ? item.cityPostalPairs
+          .slice(0, 2)
+          .map((cityObj) => `<div>${cityObj.city}</div>`)
+          .join("")
+      : "N/A";
 
     row.innerHTML = `
         <td>${item.state}</td>
         <td class="city-td text-decoration-underline" role="button" data-index="${index}">${cityDisplay}</td>
         <td>${postalCodeDisplay}</td>
         <td>
-          <i class="bi bi-pencil-fill edit text-decoration-underline" data-index="${index}"></i>
-          <i class="bi bi-trash delete" data-index="${index}"></i>
+          <i role="button" class="bi bi-pencil-fill edit text-decoration-underline" data-index="${index}"></i>
+          <i role="button" class="bi bi-trash delete" data-index="${index}"></i>
         </td>`;
     tableContent.appendChild(row);
   });
@@ -25,12 +35,14 @@ function showTableData(tableData) {
     cityTd.addEventListener("click", () => {
       const index = cityTd.dataset.index;
       const item = tableData[index];
-      showCityDetailsModal(item.cityPostalPairs);
+      showCityDetailsModal(item.cityPostalPairs, item.state);
     });
   });
 }
 
-function showCityDetailsModal(cityPostalPairs) {
+function showCityDetailsModal(cityPostalPairs, state) {
+  document.getElementById("cityDetailsModalLabel").innerHTML =
+    "State of " + state;
   const modalContainer = document.getElementById("cityDetailsContainer");
   modalContainer.innerHTML = "";
 
