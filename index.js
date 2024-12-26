@@ -41,7 +41,7 @@ description.addEventListener("blur", validDescription);
 
 // dyamic inputs
 document.getElementById("addCities").addEventListener("click", () => {
-  if (validateAllFields()) {
+  if (validateAllExistingFields()) {
     const citiesContainer = document.getElementById("citiesContainer");
 
     const newGroup = document.createElement("div");
@@ -172,7 +172,7 @@ document
   });
 
 // Validation for all existing fields
-function validateAllFields() {
+function validateAllExistingFields() {
   const stateValid = validState();
   const descriptionValid = validDescription();
 
@@ -214,11 +214,10 @@ document.getElementById("searchInput").addEventListener("input", function () {
   const tableData = localStorage.getItem("citiesData");
   const data = JSON.parse(tableData);
 
+  const searchResultsContainer = document.getElementById("searchResults");
+
   if (searchTerm === "") {
-    const searchTable = document.getElementById("searchTable");
-    if (searchTable) {
-      searchTable.remove();
-    }
+    searchResultsContainer.innerHTML = "";
     return;
   }
 
@@ -233,52 +232,47 @@ document.getElementById("searchInput").addEventListener("input", function () {
     });
     return matchingCityPostalPairs.length > 0;
   });
-  showSearchTableData(filteredData, searchTerm);
+
+  showSearchDataUI(filteredData, searchTerm);
 });
 
-function showSearchTableData(tableData, searchTerm) {
-  let searchTable = document.getElementById("searchTable");
-  if (!searchTable) {
-    searchTable = document.createElement("table");
-    searchTable.id = "searchTable";
-    searchTable.classList.add("table", "table-striped", "mt-4");
-    searchTable.innerHTML = `
-      <thead>
-        <tr>
-          <th>State</th>
-          <th>Description</th>
-          <th>City</th>
-          <th>Postal Code</th>
-        </tr>
-      </thead>
-      <tbody id="searchTableContent"></tbody>
-    `;
-    const searchContainer = document.querySelector(".my-4");
-    searchContainer.appendChild(searchTable);
-  }
+function showSearchDataUI(data, searchTerm) {
+  const searchResultsContainer = document.getElementById("searchResults");
+  searchResultsContainer.innerHTML = "";
 
-  const searchTableContent = document.getElementById("searchTableContent");
-  searchTableContent.innerHTML = "";
+  if (data && data.length > 0) {
+    let resultsFound = false;
 
-  if (tableData && tableData.length > 0) {
-    tableData.forEach((item) => {
+    data.forEach((item) => {
       item.cityPostalPairs.forEach((cityObj) => {
         if (
-          cityObj.city.toLowerCase().includes(searchTerm) ||
+          cityObj.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
           cityObj.postalCode.includes(searchTerm)
         ) {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${item.state}</td>
-            <td>${item.description}</td>
-            <td>${cityObj.city}</td>
-            <td>${cityObj.postalCode}</td>
+          resultsFound = true;
+
+          const card = document.createElement("div");
+          card.classList.add("card", "mb-3");
+          card.style.border = "1px solid #ddd";
+
+          card.innerHTML = `
+            <div class="card-body">
+              <p><strong>State</strong>: ${item.state}</p>
+              <p><strong>City</strong>: ${cityObj.city}</p>
+              <p><strong>Postal code</strong>: ${cityObj.postalCode}</p>
+            </div>
           `;
-          searchTableContent.appendChild(row);
+
+          searchResultsContainer.appendChild(card);
         }
       });
     });
+
+    // Show no results message if no matches found
+    if (!resultsFound) {
+      searchResultsContainer.innerHTML = `<div class="alert alert-warning" role="alert">No results found.</div>`;
+    }
   } else {
-    searchTableContent.innerHTML = `<tr><td colspan="4">No results found</td></tr>`;
+    searchResultsContainer.innerHTML = `<div class="alert alert-warning" role="alert">No results found.</div>`;
   }
 }
